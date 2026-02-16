@@ -54,54 +54,6 @@ export const useStudent = (id: number | string) => {
   };
 };
 
-export const useStudentFinancials = (id: number | string) => {
-  const queryClient = useQueryClient();
-
-  const query = useQuery({
-    queryKey: [QUERY_KEYS.STUDENTS, id, 'financials'],
-    queryFn: () => studentService.getFinancials(id),
-    enabled: !!id,
-  });
-
-  const addMutation = useMutation({
-    mutationFn: (data: any) => studentService.addFinancial(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS, id, 'financials'] });
-    },
-  });
-
-  return {
-    records: query.data || [],
-    isLoading: query.isLoading,
-    add: addMutation.mutateAsync,
-    isAdding: addMutation.isPending,
-  };
-};
-
-export const useStudentDisciplinary = (id: number | string) => {
-  const queryClient = useQueryClient();
-
-  const query = useQuery({
-    queryKey: [QUERY_KEYS.STUDENTS, id, 'disciplinary'],
-    queryFn: () => studentService.getDisciplinary(id),
-    enabled: !!id,
-  });
-
-  const addMutation = useMutation({
-    mutationFn: (data: any) => studentService.addDisciplinary(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS, id, 'disciplinary'] });
-    },
-  });
-
-  return {
-    records: query.data || [],
-    isLoading: query.isLoading,
-    add: addMutation.mutateAsync,
-    isAdding: addMutation.isPending,
-  };
-};
-
 export const useStudentClassHistory = (id: number | string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.STUDENTS, id, 'class-history'],

@@ -45,26 +45,6 @@ export const studentService = {
     return response.data.data;
   },
 
-  getFinancials: async (id: number | string): Promise<FinancialRecord[]> => {
-    const response = await apiClient.get<ApiResponse<FinancialRecord[]>>(ENDPOINTS.STUDENTS.FINANCIALS(id));
-    return response.data.data;
-  },
-
-  addFinancial: async (id: number | string, data: any): Promise<FinancialRecord> => {
-    const response = await apiClient.post<ApiResponse<FinancialRecord>>(ENDPOINTS.STUDENTS.FINANCIALS(id), data);
-    return response.data.data;
-  },
-
-  getDisciplinary: async (id: number | string): Promise<DisciplinaryRecord[]> => {
-    const response = await apiClient.get<ApiResponse<DisciplinaryRecord[]>>(ENDPOINTS.STUDENTS.DISCIPLINARY(id));
-    return response.data.data;
-  },
-
-  addDisciplinary: async (id: number | string, data: any): Promise<DisciplinaryRecord> => {
-    const response = await apiClient.post<ApiResponse<DisciplinaryRecord>>(ENDPOINTS.STUDENTS.DISCIPLINARY(id), data);
-    return response.data.data;
-  },
-
   getClassHistory: async (id: number | string): Promise<ClassHistory[]> => {
     const response = await apiClient.get<ApiResponse<ClassHistory[]>>(ENDPOINTS.STUDENTS.CLASS_HISTORY(id));
     return response.data.data;

@@ -8,8 +8,6 @@ export const ENDPOINTS = {
     LIST: "/students",
     DETAIL: (id: number | string) => `/students/${id}`,
     CREATE: "/students",
-    FINANCIALS: (id: number | string) => `/students/${id}/financials`,
-    DISCIPLINARY: (id: number | string) => `/students/${id}/disciplinary`,
     CLASS_HISTORY: (id: number | string) => `/students/${id}/class-history`,
   },
   USERS: {

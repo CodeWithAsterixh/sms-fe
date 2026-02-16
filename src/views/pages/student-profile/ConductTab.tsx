@@ -26,6 +26,7 @@ export const ConductTab = ({ studentId }: { studentId: number }) => {
     severity: 'low' as 'low' | 'medium' | 'high'
   });
 
+  // TODO: Switch to permission-based checks (e.g. user.permissions.includes('view_conduct'))
   const canView = ["admin", "principal", "teacher"].includes(user?.role || "");
   const canAddDisciplinary = ["admin", "principal", "teacher"].includes(user?.role || "");
   const canDeleteDisciplinary = ["admin", "principal"].includes(user?.role || "");
