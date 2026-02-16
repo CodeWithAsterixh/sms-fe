@@ -5,8 +5,8 @@ import type { ApiResponse } from "../models/api.types";
 
 export const authService = {
   login: async (credentials: LoginDTO) => {
-    const response = await apiClient.post<ApiResponse<{ user: TokenPayload }>>(ENDPOINTS.AUTH.LOGIN, credentials);
-    return response.data.data.user;
+    const response = await apiClient.post<ApiResponse<{ user: TokenPayload; accessToken: string }>>(ENDPOINTS.AUTH.LOGIN, credentials);
+    return response.data.data;
   },
   
   refreshToken: async () => {

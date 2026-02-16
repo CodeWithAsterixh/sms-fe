@@ -23,8 +23,8 @@ const LoginPage = () => {
   const onSubmit = async (data: LoginDTO) => {
     try {
       setError("");
-      const user = await authService.login(data);
-      setUser(user);
+      const { user, accessToken } = await authService.login(data);
+      setUser(user, accessToken);
       // Navigation will be handled by useEffect
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
