@@ -1,6 +1,6 @@
 import apiClient from "../api/client";
 import { ENDPOINTS } from "../api/endpoints";
-import type { Student, CreateStudentDTO } from "../models/student.types";
+import type { Student, CreateStudentDTO, FinancialRecord, DisciplinaryRecord, ClassHistory } from "../models/student.types";
 import type { ApiResponse } from "../models/api.types";
 
 export interface StudentFilters {
@@ -37,6 +37,36 @@ export const studentService = {
 
   create: async (data: CreateStudentDTO): Promise<Student> => {
     const response = await apiClient.post<ApiResponse<Student>>(ENDPOINTS.STUDENTS.CREATE, data);
+    return response.data.data;
+  },
+
+  update: async (id: number | string, data: Partial<Student>): Promise<Student> => {
+    const response = await apiClient.put<ApiResponse<Student>>(`${ENDPOINTS.STUDENTS.DETAIL(id)}`, data);
+    return response.data.data;
+  },
+
+  getFinancials: async (id: number | string): Promise<FinancialRecord[]> => {
+    const response = await apiClient.get<ApiResponse<FinancialRecord[]>>(ENDPOINTS.STUDENTS.FINANCIALS(id));
+    return response.data.data;
+  },
+
+  addFinancial: async (id: number | string, data: any): Promise<FinancialRecord> => {
+    const response = await apiClient.post<ApiResponse<FinancialRecord>>(ENDPOINTS.STUDENTS.FINANCIALS(id), data);
+    return response.data.data;
+  },
+
+  getDisciplinary: async (id: number | string): Promise<DisciplinaryRecord[]> => {
+    const response = await apiClient.get<ApiResponse<DisciplinaryRecord[]>>(ENDPOINTS.STUDENTS.DISCIPLINARY(id));
+    return response.data.data;
+  },
+
+  addDisciplinary: async (id: number | string, data: any): Promise<DisciplinaryRecord> => {
+    const response = await apiClient.post<ApiResponse<DisciplinaryRecord>>(ENDPOINTS.STUDENTS.DISCIPLINARY(id), data);
+    return response.data.data;
+  },
+
+  getClassHistory: async (id: number | string): Promise<ClassHistory[]> => {
+    const response = await apiClient.get<ApiResponse<ClassHistory[]>>(ENDPOINTS.STUDENTS.CLASS_HISTORY(id));
     return response.data.data;
   }
 };

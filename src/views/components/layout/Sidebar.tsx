@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { LayoutDashboard, Users, GraduationCap, ClipboardCheck, Bell, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Users, GraduationCap, ClipboardCheck, LogOut, Shield } from "lucide-react";
 import { useAuthStore } from "../../../store/auth.store";
 import { cn } from "../../../utils/cn";
 

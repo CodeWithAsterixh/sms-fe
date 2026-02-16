@@ -1,28 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../store/auth.store";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
+import { Loader } from "../components/ui/Loader";
 import { authService } from "../../services/auth.service";
 import { useNavigate } from "react-router";
 import type { LoginDTO } from "../../models/auth.types";
 
 const LoginPage = () => {
   const [error, setError] = useState("");
-  const { login } = useAuthStore();
+  const { setUser, isAuthenticated, isCheckingAuth } = useAuthStore();
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginDTO>();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (data: LoginDTO) => {
     try {
       setError("");
-      const response = await authService.login(data);
-      login(response.accessToken, response.refreshToken);
-      navigate("/");
+      const user = await authService.login(data);
+      setUser(user);
+      // Navigation will be handled by useEffect
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     }
   };
+
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

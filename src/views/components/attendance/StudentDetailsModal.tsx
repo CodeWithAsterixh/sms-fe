@@ -2,7 +2,9 @@ import { Dialog, DialogHeader, DialogTitle } from "../ui/Dialog";
 import { Button } from "../ui/Button";
 import type { Student } from "../../../models/student.types";
 import { clsx } from "clsx";
-import { User, Calendar, Hash, School, Activity } from "lucide-react";
+import { User, Calendar, Hash, School, Activity, ExternalLink } from "lucide-react";
+import { AttendanceActions } from "./AttendanceActions";
+import { Link } from "react-router";
 
 interface StudentDetailsModalProps {
   open: boolean;
@@ -11,6 +13,7 @@ interface StudentDetailsModalProps {
 }
 
 export const StudentDetailsModal = ({ open, onOpenChange, student }: StudentDetailsModalProps) => {
+
   if (!student) return null;
 
   return (
@@ -92,8 +95,17 @@ export const StudentDetailsModal = ({ open, onOpenChange, student }: StudentDeta
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <Button onClick={() => onOpenChange(false)}>
+      <div className="flex justify-end gap-2">
+        <Link to={`/students/${student.student_uid}`} className="w-full sm:w-auto">
+          <Button variant="outline" className="w-full gap-2">
+            <ExternalLink className="h-4 w-4" />
+            View Full Profile
+          </Button>
+        </Link>
+        <Button 
+          variant="secondary" 
+          onClick={() => onOpenChange(false)}
+        >
           Close
         </Button>
       </div>

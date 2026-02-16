@@ -14,4 +14,6 @@ export const QUERY_KEYS = {
   ATTENDANCE: "attendance",
   ANNOUNCEMENTS: "announcements",
   CURRENT_USER: "currentUser",
+  CONDUCT: "conduct",
+  FINANCIAL: "financial",
 };

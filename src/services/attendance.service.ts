@@ -12,5 +12,11 @@ export const attendanceService = {
   record: async (data: CreateAttendanceDTO): Promise<Attendance> => {
     const response = await apiClient.post<ApiResponse<Attendance>>(ENDPOINTS.ATTENDANCE.RECORD, data);
     return response.data.data;
+  },
+
+  deleteLatest: async (studentId: number | string, type?: 'IN' | 'OUT'): Promise<void> => {
+    await apiClient.delete(ENDPOINTS.ATTENDANCE.BY_STUDENT(studentId), {
+      params: { type }
+    });
   }
 };
