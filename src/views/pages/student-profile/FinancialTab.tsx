@@ -25,10 +25,9 @@ export const FinancialTab = ({ studentId }: { studentId: number }) => {
     payment_status: 'paid' as 'paid' | 'unpaid' | 'partial'
   });
 
-  // TODO: Switch to permission-based checks (e.g. user.permissions.includes('view_financials'))
-  const canView = ["admin", "principal"].includes(user?.role || "");
-  const canAdd = user?.role === "admin";
-  const canEdit = user?.role === "admin";
+  const canView = user?.permissions?.includes('view_financials') || user?.role === 'admin';
+  const canAdd = user?.permissions?.includes('manage_financials') || user?.role === 'admin';
+  const canEdit = user?.permissions?.includes('manage_financials') || user?.role === 'admin';
 
   if (!canView) return <div className="p-8 text-center text-muted-foreground">You do not have permission to view financial records.</div>;
   if (isLoading) return <Loader />;

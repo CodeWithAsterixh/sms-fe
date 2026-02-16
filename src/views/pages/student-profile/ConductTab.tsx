@@ -26,10 +26,9 @@ export const ConductTab = ({ studentId }: { studentId: number }) => {
     severity: 'low' as 'low' | 'medium' | 'high'
   });
 
-  // TODO: Switch to permission-based checks (e.g. user.permissions.includes('view_conduct'))
-  const canView = ["admin", "principal", "teacher"].includes(user?.role || "");
-  const canAddDisciplinary = ["admin", "principal", "teacher"].includes(user?.role || "");
-  const canDeleteDisciplinary = ["admin", "principal"].includes(user?.role || "");
+  const canView = user?.permissions?.includes('view_conduct') || user?.role === 'admin';
+  const canAddDisciplinary = user?.permissions?.includes('create_conduct') || user?.role === 'admin';
+  const canDeleteDisciplinary = user?.permissions?.includes('delete_conduct') || user?.role === 'admin';
 
   const handleAddDisciplinary = async () => {
     try {
