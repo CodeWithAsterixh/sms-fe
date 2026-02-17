@@ -48,5 +48,21 @@ export const studentService = {
   getClassHistory: async (id: number | string): Promise<ClassHistory[]> => {
     const response = await apiClient.get<ApiResponse<ClassHistory[]>>(ENDPOINTS.STUDENTS.CLASS_HISTORY(id));
     return response.data.data;
+  },
+
+  uploadProfileImage: async (id: number | string, file: File): Promise<Student> => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await apiClient.post<ApiResponse<Student>>(
+      ENDPOINTS.STUDENTS.PROFILE_IMAGE(id),
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.data;
   }
 };

@@ -45,12 +45,21 @@ export const useStudent = (id: number | string) => {
     },
   });
 
+  const uploadImageMutation = useMutation({
+    mutationFn: (file: File) => studentService.uploadProfileImage(id, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS, id] });
+    },
+  });
+
   return {
     student: studentQuery.data,
     isLoading: studentQuery.isLoading,
     isError: studentQuery.isError,
     update: updateMutation.mutateAsync,
     isUpdating: updateMutation.isPending,
+    uploadImage: uploadImageMutation.mutateAsync,
+    isUploading: uploadImageMutation.isPending,
   };
 };
 

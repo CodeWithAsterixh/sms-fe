@@ -1,26 +1,19 @@
 import { NavLink } from "react-router";
-import { LayoutDashboard, Users, GraduationCap, ClipboardCheck, LogOut, Shield } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useAuthStore } from "../../../store/auth.store";
 import { cn } from "../../../utils/cn";
+import { NAVIGATION_LINKS } from "../../../config/navigation";
 
 const Sidebar = () => {
   const { logout, user } = useAuthStore();
 
-  const links = [
-    { to: "/", icon: LayoutDashboard, label: "Dashboard", permission: null },
-    { to: "/students", icon: GraduationCap, label: "Students", permission: "view_students" },
-    { to: "/attendance", icon: ClipboardCheck, label: "Attendance", permission: "view_attendance" },
-    { to: "/users", icon: Users, label: "Users", permission: "view_users" },
-    { to: "/roles", icon: Shield, label: "Roles", permission: "manage_roles" },
-  ];
-
-  const visibleLinks = links.filter(link => {
+  const visibleLinks = NAVIGATION_LINKS.filter(link => {
     if (!link.permission) return true;
     return user?.permissions?.includes(link.permission) || user?.role === 'admin';
   });
 
   return (
-    <aside className="w-64 bg-card border-r min-h-screen flex flex-col">
+    <aside className="hidden md:flex w-64 bg-card border-r min-h-screen flex-col sticky top-0 h-screen">
       <div className="p-6 border-b">
         <h1 className="text-2xl font-bold text-primary">SMS</h1>
         <p className="text-xs text-muted-foreground mt-1">School Management</p>

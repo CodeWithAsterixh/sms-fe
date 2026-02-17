@@ -9,6 +9,7 @@ export const ENDPOINTS = {
     DETAIL: (id: number | string) => `/students/${id}`,
     CREATE: "/students",
     CLASS_HISTORY: (id: number | string) => `/students/${id}/class-history`,
+    PROFILE_IMAGE: (id: number | string) => `/students/${id}/profile-image`,
   },
   USERS: {
     LIST: "/users",
