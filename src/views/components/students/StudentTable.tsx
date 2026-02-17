@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useStudents } from "../../../controllers/useStudents";
 import type { Student } from "../../../models/student.types";
@@ -11,7 +12,9 @@ import { Card } from "../ui/Card";
 import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem } from "../ui/DropdownMenu";
 
 const StudentTable = () => {
-  const { students, isLoading, isError } = useStudents();
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { students, totalPages, isLoading, isError } = useStudents({ page, limit });
   const navigate = useNavigate();
 
   if (isLoading) return <Loader />;
@@ -20,7 +23,7 @@ const StudentTable = () => {
 
   const getProfileImageUrl = (student: Student) => {
     return student.photo_url 
-      ? `${ENV.API_URL}/students/${student.id}/profile-image?t=${new Date(student.updated_at).getTime()}`
+      ? `${ENV.API_URL}/images/students/${student.id}?t=${new Date(student.updated_at).getTime()}`
       : undefined;
   };
 
@@ -112,52 +115,70 @@ const StudentTable = () => {
                         fallback={`${student.first_name[0]}${student.last_name[0]}`} 
                         size="sm" 
                     />
-                    <Link to={`/students/${student.student_uid}`} className="hover:underline text-primary font-medium">
-                      {student.first_name} {student.last_name}
-                    </Link>
+                    <div>
+                        <div className="font-medium text-gray-900">{student.first_name} {student.last_name}</div>
+                        <div className="text-xs text-gray-500">{student.student_uid}</div>
+                    </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 font-medium text-gray-500">{student.student_uid}</td>
+                <td className="px-6 py-4">{student.student_uid}</td>
                 <td className="px-6 py-4">{student.class_name || student.class_id}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(student.status)}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(student.status)}`}>
                     {student.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-gray-500">{formatDate(student.created_at)}</td>
+                <td className="px-6 py-4">{formatDate(student.created_at)}</td>
                 <td className="px-6 py-4">
-                  <DropdownMenu>
-                    <DropdownTrigger>
-                      <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-5 w-5 text-gray-400" />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownContent align="right">
-                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4" />
-                          <span>View Profile</span>
-                        </div>
-                      </DropdownItem>
-                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
-                        <div className="flex items-center gap-2">
-                          <FileEdit className="h-4 w-4" />
-                          <span>Edit Details</span>
-                        </div>
-                      </DropdownItem>
-                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
-                         <div className="flex items-center gap-2">
-                          <Camera className="h-4 w-4" />
-                          <span>Change Photo</span>
-                        </div>
-                      </DropdownItem>
-                    </DropdownContent>
-                  </DropdownMenu>
+                    <DropdownMenu>
+                      <DropdownTrigger>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-5 w-5 text-gray-400" />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownContent align="right">
+                        <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            <span>View Profile</span>
+                          </div>
+                        </DropdownItem>
+                        <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                          <div className="flex items-center gap-2">
+                            <FileEdit className="h-4 w-4" />
+                            <span>Edit Details</span>
+                          </div>
+                        </DropdownItem>
+                      </DropdownContent>
+                    </DropdownMenu>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-6 gap-2 items-center">
+        <Button 
+            variant="outline" 
+            size="sm" 
+            disabled={page === 1} 
+            onClick={() => setPage(p => p - 1)}
+        >
+            Previous
+        </Button>
+        <span className="text-sm text-gray-600">
+            Page {page} of {totalPages || 1}
+        </span>
+        <Button 
+            variant="outline" 
+            size="sm" 
+            disabled={page >= (totalPages || 1)} 
+            onClick={() => setPage(p => p + 1)}
+        >
+            Next
+        </Button>
       </div>
     </>
   );

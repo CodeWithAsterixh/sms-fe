@@ -9,6 +9,7 @@ export const useStudents = (filters: StudentFilters = {}) => {
   const studentsQuery = useQuery({
     queryKey: [QUERY_KEYS.STUDENTS, filters],
     queryFn: () => studentService.getAll(filters),
+    placeholderData: (previousData) => previousData,
   });
 
   const createStudentMutation = useMutation({
@@ -36,12 +37,24 @@ export const useStudent = (id: number | string) => {
     queryKey: [QUERY_KEYS.STUDENTS, id],
     queryFn: () => studentService.getById(id),
     enabled: !!id,
+    initialData: () => {
+      const queries = queryClient.getQueriesData({ queryKey: [QUERY_KEYS.STUDENTS] });
+      for (const [key, data] of queries) {
+        if (data && (data as any).students) {
+          const student = (data as any).students.find((s: any) => 
+            s.id === Number(id) || s.student_uid === id
+          );
+          if (student) return student;
+        }
+      }
+      return undefined;
+    },
   });
 
   const updateMutation = useMutation({
     mutationFn: (data: any) => studentService.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS, id] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS] });
     },
   });
 
@@ -49,6 +62,8 @@ export const useStudent = (id: number | string) => {
     mutationFn: (file: File) => studentService.uploadProfileImage(id, file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS, id] });
+      // Also invalidate list to update thumbnails
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS], exact: false });
     },
   });
 

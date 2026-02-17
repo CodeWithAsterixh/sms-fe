@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "../../../utils/cn";
+import { User } from "lucide-react";
 
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string;
@@ -31,7 +32,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(({
     "2xl": "h-32 w-32 text-2xl",
   };
 
-  const baseClasses = "relative flex shrink-0 overflow-hidden rounded-full bg-gray-200 items-center justify-center font-bold text-gray-500 uppercase border border-gray-100 shadow-sm";
+  const baseClasses = "relative flex shrink-0 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800 items-center justify-center font-bold text-neutral-600 dark:text-neutral-300 uppercase border border-neutral-200 dark:border-neutral-700 shadow-sm";
 
   return (
     <div
@@ -45,9 +46,16 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(({
           alt={alt || "Avatar"}
           className="aspect-square h-full w-full object-cover"
           onError={() => setError(true)}
+          loading="lazy"
         />
       ) : (
-        <span>{fallback?.slice(0, 2) || "??"}</span>
+        <span className="flex items-center justify-center w-full h-full">
+          {fallback ? (
+            fallback.slice(0, 2)
+          ) : (
+            <User className="w-1/2 h-1/2 opacity-50" />
+          )}
+        </span>
       )}
     </div>
   );
