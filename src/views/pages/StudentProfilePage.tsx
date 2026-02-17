@@ -46,7 +46,7 @@ const StudentProfilePage = () => {
   });
   
   const profileImageUrl = student.photo_url 
-    ? (student.photo_url.startsWith('http') ? student.photo_url : `${ENV.API_URL}${student.photo_url}`)
+    ? `${ENV.API_URL}/students/${student.id}/profile-image?t=${new Date(student.updated_at).getTime()}`
     : undefined;
 
   return (
