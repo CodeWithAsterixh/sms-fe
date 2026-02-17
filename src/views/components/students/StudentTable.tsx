@@ -1,16 +1,18 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useStudents } from "../../../controllers/useStudents";
 import type { Student } from "../../../models/student.types";
 import { formatDate } from "../../../utils/formatDate";
 import { Loader } from "../ui/Loader";
-import { Eye } from "lucide-react";
+import { MoreVertical, User, FileEdit, Camera } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Avatar } from "../ui/Avatar";
 import { ENV } from "../../../config/env";
 import { Card } from "../ui/Card";
+import { DropdownMenu, DropdownTrigger, DropdownContent, DropdownItem } from "../ui/DropdownMenu";
 
 const StudentTable = () => {
   const { students, isLoading, isError } = useStudents();
+  const navigate = useNavigate();
 
   if (isLoading) return <Loader />;
   if (isError) return <div className="text-red-500">Error loading students</div>;
@@ -55,11 +57,34 @@ const StudentTable = () => {
                 </div>
               </Link>
             </div>
-            <Link to={`/students/${student.student_uid}`}>
-               <Button variant="ghost" size="icon">
-                 <Eye className="h-5 w-5 text-gray-400" />
-               </Button>
-            </Link>
+            
+            <DropdownMenu>
+              <DropdownTrigger>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-5 w-5 text-gray-400" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownContent align="right">
+                <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>View Profile</span>
+                  </div>
+                </DropdownItem>
+                <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                  <div className="flex items-center gap-2">
+                    <FileEdit className="h-4 w-4" />
+                    <span>Edit Details</span>
+                  </div>
+                </DropdownItem>
+                <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                   <div className="flex items-center gap-2">
+                    <Camera className="h-4 w-4" />
+                    <span>Change Photo</span>
+                  </div>
+                </DropdownItem>
+              </DropdownContent>
+            </DropdownMenu>
           </Card>
         ))}
       </div>
@@ -101,12 +126,33 @@ const StudentTable = () => {
                 </td>
                 <td className="px-6 py-4 text-gray-500">{formatDate(student.created_at)}</td>
                 <td className="px-6 py-4">
-                  <Button variant="ghost" size="sm">
-                    <Link to={`/students/${student.student_uid}`} className="flex items-center">
-                      <Eye className="h-4 w-4 mr-2" />
-                      View
-                    </Link>
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownTrigger>
+                      <Button variant="ghost" size="icon">
+                        <MoreVertical className="h-5 w-5 text-gray-400" />
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownContent align="right">
+                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                        <div className="flex items-center gap-2">
+                          <User className="h-4 w-4" />
+                          <span>View Profile</span>
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                        <div className="flex items-center gap-2">
+                          <FileEdit className="h-4 w-4" />
+                          <span>Edit Details</span>
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem onClick={() => navigate(`/students/${student.student_uid}`)}>
+                         <div className="flex items-center gap-2">
+                          <Camera className="h-4 w-4" />
+                          <span>Change Photo</span>
+                        </div>
+                      </DropdownItem>
+                    </DropdownContent>
+                  </DropdownMenu>
                 </td>
               </tr>
             ))}

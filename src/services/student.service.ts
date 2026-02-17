@@ -36,8 +36,21 @@ export const studentService = {
   },
 
   create: async (data: CreateStudentDTO): Promise<Student> => {
-    const response = await apiClient.post<ApiResponse<Student>>(ENDPOINTS.STUDENTS.CREATE, data);
-    return response.data.data;
+    if (data.image) {
+      const formData = new FormData();
+      formData.append("first_name", data.first_name);
+      formData.append("last_name", data.last_name);
+      formData.append("class_id", data.class_id.toString());
+      formData.append("image", data.image);
+      
+      const response = await apiClient.post<ApiResponse<Student>>(ENDPOINTS.STUDENTS.CREATE, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      return response.data.data;
+    } else {
+      const response = await apiClient.post<ApiResponse<Student>>(ENDPOINTS.STUDENTS.CREATE, data);
+      return response.data.data;
+    }
   },
 
   update: async (id: number | string, data: Partial<Student>): Promise<Student> => {

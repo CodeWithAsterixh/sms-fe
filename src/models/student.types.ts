@@ -21,6 +21,7 @@ export interface CreateStudentDTO {
   first_name: string;
   last_name: string;
   class_id: number;
+  image?: File;
 }
 
 export interface FinancialRecord {
