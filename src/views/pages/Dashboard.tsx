@@ -3,7 +3,14 @@ import { useClasses } from "../../controllers/useClasses";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import { Users, GraduationCap, School } from "lucide-react";
 
-const StatCard = ({ title, value, icon: Icon, color }: any) => (
+interface StatCardProps {
+  title: string;
+  value: number | string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color }) => (
   <Card>
     <CardContent className="p-6">
       <div className="flex items-center justify-between">

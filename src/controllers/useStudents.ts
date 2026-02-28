@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { studentService, type StudentFilters } from "../services/student.service";
-import type { CreateStudentDTO } from "../models/student.types";
+import { studentService, type StudentFilters, type PaginatedStudents } from "../services/student.service";
+import type { CreateStudentDTO, Student } from "../models/student.types";
 import { QUERY_KEYS } from "../config/constants";
 
 export const useStudents = (filters: StudentFilters = {}) => {
@@ -40,9 +40,10 @@ export const useStudent = (id: number | string) => {
     initialData: () => {
       const queries = queryClient.getQueriesData({ queryKey: [QUERY_KEYS.STUDENTS] });
       for (const [key, data] of queries) {
-        if (data && (data as any).students) {
-          const student = (data as any).students.find((s: any) => 
-            s.id === Number(id) || s.student_uid === id
+        const paginated = data as PaginatedStudents | undefined;
+        if (paginated && Array.isArray(paginated.students)) {
+          const student = paginated.students.find(
+            (s) => s.id === Number(id) || s.student_uid === id
           );
           if (student) return student;
         }
@@ -52,7 +53,7 @@ export const useStudent = (id: number | string) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: any) => studentService.update(id, data),
+    mutationFn: (data: Partial<Student>) => studentService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.STUDENTS] });
     },
